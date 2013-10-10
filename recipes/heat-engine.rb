@@ -1,6 +1,6 @@
 #
 # Cookbook Name:: heat
-# Recipe:: heat-api-cloudwatch
+# Recipe:: heat-engine
 #
 # Copyright 2013, Rackspace US, Inc.
 #
@@ -19,7 +19,7 @@
 
 platform_options = node["heat"]["platform"]
 
-platform_options["cloudwatch_api_package_list"].each do |pkg|
+platform_options["heat_engine_package_list"].each do |pkg|
   package pkg do
     action node["osops"]["do_package_upgrades"] == true ? :upgrade : :install
     options platform_options["package_overrides"]
@@ -28,7 +28,7 @@ end
 
 include_recipe "heat::heat-common"
 
-service platform_options["cloudwatch_api_service"] do
+service platform_options["heat_engine_service"] do
   supports :status => true, :restart => true
   action [:enable, :start]
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
@@ -38,15 +38,8 @@ end
 include_recipe "monit::server"
 
 # matching a process name
-monit_procmon platform_options["cloudwatch_api_service"] do
-  process_name platform_options["cloudwatch_api_service"]
-  start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
-  stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
-end
-
-template "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
-  source "AWS_CloudWatch_Alarm.yaml.erb"
-  owner "heat"
-  group "heat"
-  mode "0644"
+monit_procmon platform_options["heat_engine_service"] do
+  process_name platform_options["heat_engine_service"]
+  start_cmd "service #{platform_options["heat_engine_service"]} start"
+  stop_cmd "service #{platform_options["heat_engine_service"]} stop"
 end

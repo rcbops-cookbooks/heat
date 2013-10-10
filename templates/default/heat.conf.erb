@@ -27,14 +27,16 @@ max_template_size=10240
 # Set the encryption key
 auth_encryption_key=<%= @heat_auth_encryption_key %>
 
-<% if node["heat"]["services"]["cloudwatch_api"]["enabled"] == true -%>
+<% if node["heat"]["services"]["cloudwatch_api"]["enabled"] -%>
 # Cloud Watch Server URL
 heat_watch_server_url=<%= @heat_api_cloudwatch_scheme %>://<%= @heat_api_cloudwatch_host %>:<%= @heat_api_cloudwatch_port %>
 <% end -%>
 
+<% if node["heat"]["services"]["cfn_api"]["enabled"] -%>
 # Heat server bits
-heat_waitcondition_server_url=<%= @heat_api_scheme %>://<%= @heat_api_host %>:<%= @heat_api_port %>/v1/waitcondition
-heat_metadata_server_url=<%= @heat_api_scheme %>://<%= @heat_api_host %>:<%= @heat_api_port %>
+heat_waitcondition_server_url=<%= @heat_api_cfn_scheme %>://<%= @heat_api_cfn_host %>:<%= @heat_api_cfn_port %>/v1/waitcondition
+heat_metadata_server_url=<%= @heat_api_cfn_scheme %>://<%= @heat_api_cfn_host %>:<%= @heat_api_cfn_port %>
+<% end -%>
 
 ##### RABBITMQ #####
 <%= render "partials/queue-config.partial.erb" %>

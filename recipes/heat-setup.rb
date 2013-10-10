@@ -60,27 +60,12 @@ mysql_info = create_db_and_user(
   node["heat"]["db"]["password"]
 )
 
-include_recipe "heat::heat-common"
-
-platform_options["heat_engine_package_list"].each do |pkg|
-  package pkg do
-    action node["osops"]["do_package_upgrades"] == true ? :upgrade : :install
-    options platform_options["package_overrides"]
-  end
-end
-
 execute "heat db sync" do
   command "heat-manage db_sync"
   user "heat"
   group "heat"
   action :nothing
   subscribes :run, "template[/etc/heat/heat.conf]", :immediately
-end
-
-service platform_options["heat_engine_service"] do
-  supports :status => true, :restart => true
-  action [:enable, :start]
-  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
 # register the service user

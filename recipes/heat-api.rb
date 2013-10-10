@@ -34,6 +34,16 @@ service platform_options["api_service"] do
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
+# Add a monit process for heat
+include_recipe "monit::server"
+
+# matching a process name
+monit_procmon platform_options["api_service"] do
+  process_name platform_options["api_service"]
+  start_cmd "service #{platform_options["api_service"]} start"
+  stop_cmd "service #{platform_options["api_service"]} stop"
+end
+
 ks_admin_endpoint = get_access_endpoint("keystone-api", "keystone", "admin-api")
 keystone = get_settings_by_role("keystone-setup", "keystone")
 

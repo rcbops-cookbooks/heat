@@ -40,7 +40,7 @@ directory "/var/cache/heat" do
   action :create
   owner "heat"
   group "heat"
-  mode "750"
+  mode "700"
 end
 
 # setup cert files
