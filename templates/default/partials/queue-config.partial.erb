@@ -1,0 +1,7 @@
+rabbit_password=guest
+rabbit_hosts=<%= @rabbit_host %>:<%= @rabbit_port %>
+rabbit_ha_queues=<%= @rabbit_ha_queues %>
+
+##### RCB BACKEND #####
+rpc_backend = heat.openstack.common.rpc.impl_kombu
+ 
