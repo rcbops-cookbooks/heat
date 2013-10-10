@@ -34,6 +34,13 @@ service platform_options["cfn_api_service"] do
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
+template "/etc/heat/templates/AWS_RDS_DBInstance.yaml" do
+  source "AWS_RDS_DBInstance.yaml.erb"
+  owner "heat"
+  group "heat"
+  mode "0644"
+end
+
 ks_admin_endpoint = get_access_endpoint("keystone-api", "keystone", "admin-api")
 keystone = get_settings_by_role("keystone-setup", "keystone")
 

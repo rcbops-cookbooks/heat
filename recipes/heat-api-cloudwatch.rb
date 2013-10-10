@@ -33,3 +33,10 @@ service platform_options["cloudwatch_api_service"] do
   action [:enable, :start]
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
+
+template "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
+  source "AWS_CloudWatch_Alarm.yaml.erb"
+  owner "heat"
+  group "heat"
+  mode "0644"
+end

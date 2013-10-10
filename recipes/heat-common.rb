@@ -36,11 +36,11 @@ platform_options["supporting_packages"].each do |pkg|
 end
 
 # signing dir is here, even for clients
-directory "/var/lib/heat" do
+directory "/var/cache/heat" do
   action :create
   owner "heat"
   group "heat"
-  mode "700"
+  mode "750"
 end
 
 # setup cert files
@@ -126,6 +126,24 @@ cw_api_options = service_options["cloudwatch_api"]
 heat_api = get_bind_endpoint("heat", "base_api")
 heat_cfn_api = get_bind_endpoint("heat", "cfn_api")
 heat_cloudwatch_api = get_bind_endpoint("heat", "cloudwatch_api")
+
+# Create Directories
+directories = ["/etc/heat/environment.d", "/etc/heat/templates"]
+directories.each do |dir|
+  directory dir do
+    action :create
+    owner "heat"
+    group "heat"
+    mode "755"
+  end
+end
+
+template "/etc/heat/environment.d/default.yaml" do
+  source "environment.default.yaml.erb"
+  owner "heat"
+  group "heat"
+  mode "0644"
+end
 
 template "/etc/heat/heat.conf" do
   source "heat.conf.erb"
