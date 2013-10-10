@@ -39,12 +39,8 @@ keystone = get_settings_by_role("keystone-setup", "keystone")
 
 # register the endpoint
 heat_api = get_bind_endpoint("heat", "base_api")
-
-heat_internal_api = get_bind_endpoint("heat", "internal-api")
-heat_internal_api["port"] = heat_api["port"]
-
-heat_admin_api = get_bind_endpoint("heat", "admin-api")
-heat_admin_api["port"] = heat_api["port"]
+heat_internal_api = get_bind_endpoint("heat", "base_internal_api")
+heat_admin_api = get_bind_endpoint("heat", "base_admin_api")
 
 keystone_endpoint "Register Heat Endpoint" do
   auth_host ks_admin_endpoint["host"]

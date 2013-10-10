@@ -54,6 +54,16 @@ default["heat"]["services"]["cfn_api"]["cert"] = "heat.pem"
 default["heat"]["services"]["cfn_api"]["key"] = "heat.key"
 default["heat"]["services"]["cfn_api"]["workers"] = 10
 
+default["heat"]["services"]["cfn_internal_api"]["scheme"] = "http"
+default["heat"]["services"]["cfn_internal_api"]["network"] = "management"
+default["heat"]["services"]["cfn_internal_api"]["port"] = 8000
+default["heat"]["services"]["cfn_internal_api"]["path"] = "/v1/$(tenant_id)s"
+
+default["heat"]["services"]["cfn_admin_api"]["scheme"] = "http"
+default["heat"]["services"]["cfn_admin_api"]["network"] = "management"
+default["heat"]["services"]["cfn_admin_api"]["port"] = 8000
+default["heat"]["services"]["cfn_admin_api"]["path"] = "/v1/$(tenant_id)s"
+
 # Heat API
 default["heat"]["services"]["base_api"]["enabled"] = true
 default["heat"]["services"]["base_api"]["scheme"] = "http"
@@ -66,15 +76,15 @@ default["heat"]["services"]["base_api"]["cert"] = "heat.pem"
 default["heat"]["services"]["base_api"]["key"] = "heat.key"
 default["heat"]["services"]["base_api"]["workers"] = 10
 
-# Internals
-default["heat"]["services"]["internal-api"]["scheme"] = "http"
-default["heat"]["services"]["internal-api"]["network"] = "management"
-default["heat"]["services"]["internal-api"]["path"] = "/v1/$(tenant_id)s"
+default["heat"]["services"]["base_internal_api"]["scheme"] = "http"
+default["heat"]["services"]["base_internal_api"]["network"] = "management"
+default["heat"]["services"]["base_internal_api"]["port"] = 8004
+default["heat"]["services"]["base_internal_api"]["path"] = "/v1/$(tenant_id)s"
 
-# Admin
-default["heat"]["services"]["admin-api"]["scheme"] = "http"
-default["heat"]["services"]["admin-api"]["network"] = "management"
-default["heat"]["services"]["admin-api"]["path"] = "/v1/$(tenant_id)s"
+default["heat"]["services"]["base_admin_api"]["scheme"] = "http"
+default["heat"]["services"]["base_admin_api"]["network"] = "management"
+default["heat"]["services"]["base_admin_api"]["port"] = 8004
+default["heat"]["services"]["base_admin_api"]["path"] = "/v1/$(tenant_id)s"
 
 default["heat"]["auth_encryption_key"] = "AnyStringWillDoJustFine"
 default["heat"]["syslog"]["use"] = false

@@ -39,11 +39,8 @@ keystone = get_settings_by_role("keystone-setup", "keystone")
 
 # register the endpoint
 heat_api_cfn = get_bind_endpoint("heat", "cfn_api")
-heat_internal_api = get_bind_endpoint("heat", "internal-api")
-heat_internal_api["port"] = heat_api_cfn["port"]
-
-heat_admin_api = get_bind_endpoint("heat", "admin-api")
-heat_admin_api["port"] = heat_api_cfn["port"]
+heat_internal_api = get_bind_endpoint("heat", "cfn_internal_api")
+heat_admin_api = get_bind_endpoint("heat", "cfn_admin_api")
 
 # Create Service
 keystone_service "Register Heat Cloudformation Service" do
