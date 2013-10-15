@@ -31,14 +31,14 @@ platform_options = node["heat"]["platform"]
 if node["developer_mode"] == true
   node.set_unless["heat"]["db"]["password"] = "heat"
 else
-  node.set_unless["heat"]["db"]["password"] = secure_password
+  node.set_unless["heat"]["db"]["password"] = secure_password(16)
 end
 
 # Encryption Secrete
 node.set_unless["heat"]["auth_encryption_key"] = secure_password(64)
 
 # set a secure heat service password
-node.set_unless["heat"]["service_pass"] = secure_password
+node.set_unless["heat"]["service_pass"] = secure_password(24)
 
 # Save our attributes
 node.save
