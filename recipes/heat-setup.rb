@@ -35,12 +35,12 @@ else
 end
 
 # Encryption Secrete
-node.set_unless["heat"]["auth_encryption_key"] = secure_password
+node.set_unless["heat"]["auth_encryption_key"] = secure_password(64)
 
 # set a secure heat service password
 node.set_unless["heat"]["service_pass"] = secure_password
 
-# Save our attributes 
+# Save our attributes
 node.save
 
 include_recipe "mysql::client"
