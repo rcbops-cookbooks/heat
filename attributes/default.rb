@@ -24,7 +24,6 @@ default["heat"]["service_tenant_name"] = "service"
 default["heat"]["service_user"] = "heat"
 default["heat"]["service_role"] = "admin"
 
-default["heat"]["ssl"]["dir"] = "/etc/ssl"
 default["heat"]["ssl"]["enabled"] = false
 default["heat"]["ssl"]["ca_file"] = nil
 default["heat"]["ssl"]["cert_file"] = "heat.pem"
@@ -95,10 +94,22 @@ default["heat"]["logging"]["verbose"] = "true"
 
 case platform_family
 when "rhel"
-  default["heat"]["platform"] = {}
+  default["heat"]["platform"] = {
+    "supporting_packages" => %w[openstack-heat-common MySQL-python python-heatclient],
+    "api_package_list" => ["openstack-heat-api"],
+    "api_service" => "openstack-heat-api",
+    "cfn_api_package_list" => ["openstack-heat-api-cfn"],
+    "cfn_api_service" => "openstack-heat-api-cfn",
+    "cloudwatch_api_package_list" => ["openstack-heat-api-cloudwatch"],
+    "cloudwatch_api_service" => "openstack-heat-api-cloudwatch",
+    "heat_engine_package_list" => ["openstack-heat-engine"],
+    "heat_engine_service" => "openstack-heat-engine",
+    "package_overrides" => ""
+  }
+  default["heat"]["ssl"]["dir"] = "/etc/pki/tls"
 when "debian"
   default["heat"]["platform"] = {
-    "supporting_packages" => ["heat-common", "python-heat", "python-mysqldb", "python-heatclient"],
+    "supporting_packages" => %w[heat-common python-heat python-mysqldb python-heatclient],
     "api_package_list" => ["heat-api"],
     "api_service" => "heat-api",
     "cfn_api_package_list" => ["heat-api-cfn"],
