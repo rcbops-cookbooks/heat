@@ -36,7 +36,7 @@ end
 
 # Drop The Default Alarm File in our Templates.
 cookbook_file "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
-  source "AWS_CloudWatch_Alarm.yaml.erb"
+  source "AWS_CloudWatch_Alarm.yaml"
   owner "heat"
   group "heat"
   mode "0644"
