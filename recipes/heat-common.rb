@@ -138,8 +138,8 @@ directories.each do |dir|
   end
 end
 
-template "/etc/heat/environment.d/default.yaml" do
-  source "environment.default.yaml.erb"
+cookbook_file "/etc/heat/environment.d/default.yaml" do
+  source "environment.default.yaml"
   owner "heat"
   group "heat"
   mode "0644"
@@ -151,6 +151,7 @@ template "/etc/heat/heat.conf" do
   group "heat"
   mode "0660"
   variables(
+    "template_size" => heat["template_size"],
     "verbose" => heat["logging"]["verbose"],
     "debug" => heat["logging"]["debug"],
     "use_syslog" => heat["syslog"]["use"],

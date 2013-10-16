@@ -29,6 +29,9 @@ default["heat"]["ssl"]["ca_file"] = nil
 default["heat"]["ssl"]["cert_file"] = "heat.pem"
 default["heat"]["ssl"]["key_file"] = "heat.key"
 
+# Max Template Size
+default["heat"]["template_size"] =  20480
+
 # Cloud Watch API
 default["heat"]["services"]["cloudwatch_api"]["enabled"] = true
 default["heat"]["services"]["cloudwatch_api"]["scheme"] = "http"

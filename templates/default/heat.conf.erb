@@ -22,7 +22,7 @@ log_file=heat.log
 sql_connection=mysql://<%= "#{@mysql_user}:#{@mysql_password}@#{@mysql_host}/#{@mysql_db}" %>
 
 # Max size
-max_template_size=10240
+max_template_size=<%= @template_size %>
 
 # Set the encryption key
 auth_encryption_key=<%= @heat_auth_encryption_key %>

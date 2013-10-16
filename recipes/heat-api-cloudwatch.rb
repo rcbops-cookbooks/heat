@@ -34,19 +34,32 @@ service platform_options["cloudwatch_api_service"] do
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
-# Add a monit process for heat
-include_recipe "monit::server"
-
-# matching a process name
-monit_procmon platform_options["cloudwatch_api_service"] do
-  process_name platform_options["cloudwatch_api_service"]
-  start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
-  stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
-end
-
-template "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
+# Drop The Default Alarm File in our Templates.
+cookbook_file "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
   source "AWS_CloudWatch_Alarm.yaml.erb"
   owner "heat"
   group "heat"
   mode "0644"
+end
+
+# Setup SSL
+if heat_api_cfn["scheme"] == "https"
+  include_recipe "heat::heat-api-cloudwatch-ssl"
+else
+  # Add a monit process for heat
+  include_recipe "monit::server"
+
+  # matching a process name
+  monit_procmon platform_options["cloudwatch_api_service"] do
+    process_name platform_options["cloudwatch_api_service"]
+    start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
+    stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
+  end
+
+  if node.recipe?"apache2"
+    apache_site platform_options["cloudwatch_api_service"] do
+      enable false
+      notifies :restart, "service[apache2]", :immediately
+    end
+  end
 end

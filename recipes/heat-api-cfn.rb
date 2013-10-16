@@ -34,18 +34,8 @@ service platform_options["cfn_api_service"] do
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
-# Add a monit process for heat
-include_recipe "monit::server"
-
-# matching a process name
-monit_procmon platform_options["cfn_api_service"] do
-  process_name platform_options["cfn_api_service"]
-  start_cmd "service #{platform_options["cfn_api_service"]} start"
-  stop_cmd "service #{platform_options["cfn_api_service"]} stop"
-end
-
-template "/etc/heat/templates/AWS_RDS_DBInstance.yaml" do
-  source "AWS_RDS_DBInstance.yaml.erb"
+cookbook_file "/etc/heat/templates/AWS_RDS_DBInstance.yaml" do
+  source "AWS_RDS_DBInstance.yaml"
   owner "heat"
   group "heat"
   mode "0644"
@@ -85,4 +75,26 @@ keystone_endpoint "Register Heat Cloudformation Endpoint" do
   endpoint_internalurl heat_internal_api["uri"]
   endpoint_publicurl heat_api_cfn["uri"]
   action :create
+end
+
+# Setup SSL
+if heat_api_cfn["scheme"] == "https"
+  include_recipe "heat::heat-api-cfn-ssl"
+else
+  # Add a monit process for heat
+  include_recipe "monit::server"
+
+  # matching a process name
+  monit_procmon platform_options["cfn_api_service"] do
+    process_name platform_options["cfn_api_service"]
+    start_cmd "service #{platform_options["cfn_api_service"]} start"
+    stop_cmd "service #{platform_options["cfn_api_service"]} stop"
+  end
+
+  if node.recipe?"apache2"
+    apache_site platform_options["cfn_api_service"] do
+      enable false
+      notifies :restart, "service[apache2]", :immediately
+    end
+  end
 end

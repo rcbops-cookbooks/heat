@@ -1,7 +1,7 @@
 Listen <%= @listen_ip %>:<%= @service_port %>
 <VirtualHost <%= @listen_ip %>:<%= @service_port %>>
     WSGIScriptAlias / <%= @wsgi_file %>
-    WSGIDaemonProcess <%= @proc_group %> user=heat group=heat threads=5
+    WSGIDaemonProcess <%= @proc_group %> user=heat group=heat threads=<%= @workers %>
     WSGIProcessGroup <%= @proc_group %>
 
     SSLEngine On
