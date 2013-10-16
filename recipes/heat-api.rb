@@ -57,7 +57,7 @@ keystone_endpoint "Register Heat Endpoint" do
 end
 
 # Setup SSL
-if heat_api_cfn["scheme"] == "https"
+if heat_api["scheme"] == "https"
   include_recipe "heat::heat-api-ssl"
 else
   # Add a monit process for heat

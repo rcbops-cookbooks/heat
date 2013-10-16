@@ -42,8 +42,10 @@ cookbook_file "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
   mode "0644"
 end
 
+heat_api_cloudwatch = get_bind_endpoint("heat", "cloudwatch_api")
+
 # Setup SSL
-if heat_api_cfn["scheme"] == "https"
+if heat_api_cloudwatch["scheme"] == "https"
   include_recipe "heat::heat-api-cloudwatch-ssl"
 else
   # Add a monit process for heat
