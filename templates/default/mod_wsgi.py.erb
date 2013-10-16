@@ -25,7 +25,7 @@ from paste import deploy
 
 LOG = logging.getLogger('<%= @service %>')
 
-config_files = '/etc/heat/heat.conf'
+conf = '/etc/heat/heat.conf'
 name = "<%= @name %>"
 options = deploy.appconfig('config:%s' % conf, name=name)
 application = deploy.loadapp('config:%s' % conf, name=name)

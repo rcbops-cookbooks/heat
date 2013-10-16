@@ -53,7 +53,7 @@ template wsgi_path do
   group "root"
   variables(
     :service => "heat.api.cfn",
-    :name => "heat-api-cfn"
+    :name => "heat_api_cfn"
   )
 end
 
