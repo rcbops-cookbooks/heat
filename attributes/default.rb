@@ -29,6 +29,22 @@ default["heat"]["ssl"]["ca_file"] = nil
 default["heat"]["ssl"]["cert_file"] = "heat.pem"
 default["heat"]["ssl"]["key_file"] = "heat.key"
 
+# policy
+default["heat"]["policy_file"] = "policy.json"
+default["heat"]["policy_default_rule"] = "default"
+
+# Heartbeat
+default["heat"]["heartbeat"]["freq"] = 300
+default["heat"]["heartbeat"]["ttl"] = 600
+
+# Salve Database Stuffs
+default["heat"]["sqlslave"]["enabled"] = false
+default["heat"]["sqlslave"]["salve_user"] = nil
+default["heat"]["sqlslave"]["salve_password"] = nil
+default["heat"]["sqlslave"]["salve_host"] = nil
+default["heat"]["sqlslave"]["salve_db"] = "mysql"
+
+
 # Max Template Size
 default["heat"]["template_size"] =  20480
 

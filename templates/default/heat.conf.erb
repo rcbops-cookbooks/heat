@@ -18,9 +18,6 @@ syslog_log_facility=<%= @syslog_log_facility %>
 log_dir=/var/log/heat
 log_file=heat.log
 
-# SQL Connection
-sql_connection=mysql://<%= "#{@mysql_user}:#{@mysql_password}@#{@mysql_host}/#{@mysql_db}" %>
-
 # Max size
 max_template_size=<%= @template_size %>
 
@@ -40,6 +37,13 @@ heat_metadata_server_url=<%= @heat_api_cfn_scheme %>://<%= @heat_api_cfn_host %>
 
 ##### RABBITMQ #####
 <%= render "partials/queue-config.partial.erb" %>
+
+##### POLICY #####
+policy_file=<%= @policy_file %>
+policy_default_rule=<%= @policy_default_rule %>
+
+##### HEARTBEAT #####
+<%= render "partials/heatbeat.partial.erb" %>
 
 ##### EC2 #####
 <%= render "partials/ec2.partial.erb" %>
@@ -63,6 +67,10 @@ heat_metadata_server_url=<%= @heat_api_cfn_scheme %>://<%= @heat_api_cfn_host %>
 ##### CLOUD FORMATION API #####
 <%= render "partials/cfn.partial.erb" %>
 <% end -%>
+
+##### DATABASE #####
+<%= render "partials/database.partial.erb" %>
+
 
 ##### KEYSTONE #####
 <%= render "partials/keystone.partial.erb" %>

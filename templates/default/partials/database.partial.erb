@@ -1,0 +1,12 @@
+[database]
+backend=sqlalchemy
+
+# SQL Connection
+connection=mysql://<%= "#{@mysql_user}:#{@mysql_password}@#{@mysql_host}/#{@mysql_db}" %>
+max_retries=10
+retry_interval=10
+
+<% if node["heat"]["sqlslave"]["enabled"] -%>
+# The SQL SALVE Connection
+slave_connection=<%= @slave_db_type %>://<%= "#{@slave_user}:#{@slave_password}@#{@slave_host}/#{@slave_db}" %>
+<% end -%>

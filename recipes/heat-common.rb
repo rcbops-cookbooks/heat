@@ -138,6 +138,13 @@ directories.each do |dir|
   end
 end
 
+cookbook_file "/etc/heat/policy.json" do
+  source "policy.json"
+  owner "heat"
+  group "heat"
+  mode "0644"
+end
+
 cookbook_file "/etc/heat/environment.d/default.yaml" do
   source "environment.default.yaml"
   owner "heat"
@@ -162,9 +169,21 @@ template "/etc/heat/heat.conf" do
     "mysql_host" => mysql_connect_ip,
     "mysql_db" => heat["db"]["name"],
 
+    "policy_file" => heat["policy_file"],
+    "policy_default_rule" => heat["policy_default_rule"],
+
     "heat_admin" => heat["service_user"],
     "heat_password" => heat["service_pass"],
     "heat_tenant" => heat["service_tenant_name"],
+
+    "heartbeat_ttl" => heat["heartbeat"]["ttl"],
+    "heartbeat_freq" => heat["heartbeat"]["freq"],
+
+    "slave_db_type" => heat["sqlslave"]["salve_db_type"],
+    "slave_user" => heat["sqlslave"]["salve_user"],
+    "slave_password" => heat["sqlslave"]["salve_password"],
+    "slave_host" => heat["sqlslave"]["salve_host"],
+    "slave_db" => heat["sqlslave"]["salve_db"],
 
     "ssl_key_file" => key_location,
     "ssl_cert_file" => cert_location,
@@ -207,5 +226,7 @@ template "/etc/heat/heat.conf" do
     "rabbit_host" => rabbit_info["host"],
     "rabbit_port" => rabbit_info["port"],
     "rabbit_ha_queues" => rabbit_settings["cluster"] ? "True" : "False",
+    "rabbit_password" => rabbit_settings["default_pass"],
+    "rabbit_username" => rabbit_settings["default_user"]
   )
 end
