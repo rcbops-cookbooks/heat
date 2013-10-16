@@ -37,13 +37,17 @@ default["heat"]["policy_default_rule"] = "default"
 default["heat"]["heartbeat"]["freq"] = 300
 default["heat"]["heartbeat"]["ttl"] = 600
 
-# Salve Database Stuffs
-default["heat"]["sqlslave"]["enabled"] = false
-default["heat"]["sqlslave"]["salve_user"] = nil
-default["heat"]["sqlslave"]["salve_password"] = nil
-default["heat"]["sqlslave"]["salve_host"] = nil
-default["heat"]["sqlslave"]["salve_db"] = "mysql"
+# Default SQL Stuffs
+default["heat"]["sql"]["backend"] = "sqlalchemy"
+default["heat"]["sql"]["max_retries"] = 10
+default["heat"]["sql"]["retry_interval"] = 10
 
+# Salve Database Stuffs
+default["heat"]["sql"]["slave"]["enabled"] = false
+default["heat"]["sql"]["slave"]["salve_user"] = nil
+default["heat"]["sql"]["slave"]["salve_password"] = nil
+default["heat"]["sql"]["slave"]["salve_host"] = nil
+default["heat"]["sql"]["slave"]["salve_db"] = "mysql"
 
 # Max Template Size
 default["heat"]["template_size"] =  20480
