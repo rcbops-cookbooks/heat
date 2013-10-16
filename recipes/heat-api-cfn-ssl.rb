@@ -87,7 +87,7 @@ template value_for_platform(
     :key_file => srvs["cert_location"],
     :wsgi_file  => wsgi_path,
     :workers => node["heat"]["services"][api_name]["workers"],
-    :proc_group => "heat",
+    :proc_group => api_name,
     :log_file => "/var/log/heat/heat.log"
   )
   notifies :reload, "service[apache2]", :delayed
