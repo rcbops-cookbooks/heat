@@ -86,6 +86,7 @@ template value_for_platform(
     :cert_file => srvs["key_location"],
     :key_file => srvs["cert_location"],
     :wsgi_file  => wsgi_path,
+    :workers => node["heat"]["services"][api_name]["workers"],
     :proc_group => "heat",
     :log_file => "/var/log/heat/heat.log"
   )
