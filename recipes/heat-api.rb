@@ -28,12 +28,6 @@ end
 
 include_recipe "heat::heat-common"
 
-service platform_options["api_service"] do
-  supports :status => true, :restart => true
-  action [:enable, :start]
-  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
-end
-
 ks_admin_endpoint = get_access_endpoint("keystone-api", "keystone", "admin-api")
 keystone = get_settings_by_role("keystone-setup", "keystone")
 
@@ -56,10 +50,34 @@ keystone_endpoint "Register Heat Endpoint" do
   action :create
 end
 
+# Start Stop Service
+service platform_options["api_service"] do
+  supports :status => true, :restart => true
+  unless heat_api["scheme"] == "https"
+    action [:enable, :start]
+    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
+  else
+    action [ :disable, :stop ]
+  end
+end
+
 # Setup SSL
 if heat_api["scheme"] == "https"
+  # Set service stop
+  service platform_options["cfn_api_service"] do
+    supports :status => true, :restart => true
+    action [ :disable, :stop ]
+  end
+
   include_recipe "heat::heat-api-ssl"
 else
+  # Set service start
+  service platform_options["api_service"] do
+    supports :status => true, :restart => true
+    action [:enable, :start]
+    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
+  end
+
   # Add a monit process for heat
   include_recipe "monit::server"
 

@@ -28,12 +28,6 @@ end
 
 include_recipe "heat::heat-common"
 
-service platform_options["cloudwatch_api_service"] do
-  supports :status => true, :restart => true
-  action [:enable, :start]
-  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
-end
-
 # Drop The Default Alarm File in our Templates.
 cookbook_file "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
   source "AWS_CloudWatch_Alarm.yaml"
@@ -46,8 +40,21 @@ heat_api_cloudwatch = get_bind_endpoint("heat", "cloudwatch_api")
 
 # Setup SSL
 if heat_api_cloudwatch["scheme"] == "https"
+  #Set Service Stop
+  service platform_options["cloudwatch_api_service"] do
+    supports :status => true, :restart => true
+    action [ :disable, :stop ]
+  end
+
   include_recipe "heat::heat-api-cloudwatch-ssl"
 else
+  # Set service start
+  service platform_options["cloudwatch_api_service"] do
+    supports :status => true, :restart => true
+    action [:enable, :start]
+    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
+  end
+
   # Add a monit process for heat
   include_recipe "monit::server"
 

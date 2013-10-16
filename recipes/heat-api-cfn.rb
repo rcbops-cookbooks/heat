@@ -28,12 +28,6 @@ end
 
 include_recipe "heat::heat-common"
 
-service platform_options["cfn_api_service"] do
-  supports :status => true, :restart => true
-  action [:enable, :start]
-  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
-end
-
 cookbook_file "/etc/heat/templates/AWS_RDS_DBInstance.yaml" do
   source "AWS_RDS_DBInstance.yaml"
   owner "heat"
@@ -79,8 +73,21 @@ end
 
 # Setup SSL
 if heat_api_cfn["scheme"] == "https"
+  # Set service stop
+  service platform_options["cfn_api_service"] do
+    supports :status => true, :restart => true
+    action [ :disable, :stop ]
+  end
+
   include_recipe "heat::heat-api-cfn-ssl"
 else
+  # Set service start
+  service platform_options["cfn_api_service"] do
+    supports :status => true, :restart => true
+    action [:enable, :start]
+    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
+  end
+
   # Add a monit process for heat
   include_recipe "monit::server"
 

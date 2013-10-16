@@ -23,9 +23,9 @@ from heat.openstack.common import log as logging
 
 from paste import deploy
 
-LOG = logging.getLogger('<%= @api_service %>')
+LOG = logging.getLogger('<%= @service %>')
 
 config_files = '/etc/heat/heat.conf'
-name = "<%= @api_name %>"
+name = "<%= @name %>"
 options = deploy.appconfig('config:%s' % conf, name=name)
 application = deploy.loadapp('config:%s' % conf, name=name)
