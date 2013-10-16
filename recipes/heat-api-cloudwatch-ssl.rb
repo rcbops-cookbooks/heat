@@ -83,8 +83,8 @@ template value_for_platform(
   variables(
     :listen_ip => bind_info["host"],
     :service_port => bind_info["port"],
-    :cert_file => srvs["key_location"],
-    :key_file => srvs["cert_location"],
+    :cert_file => srvs["cert_location"],
+    :key_file => srvs["key_location"],
     :wsgi_file  => wsgi_path,
     :workers => node["heat"]["services"][api_name]["workers"],
     :proc_group => api_name,
