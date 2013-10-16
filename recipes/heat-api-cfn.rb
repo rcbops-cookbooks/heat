@@ -68,7 +68,7 @@ keystone_endpoint "Register Heat Cloudformation Endpoint" do
   endpoint_adminurl heat_admin_api["uri"]
   endpoint_internalurl heat_internal_api["uri"]
   endpoint_publicurl heat_api_cfn["uri"]
-  action :create
+  action :recreate
 end
 
 # Setup SSL
