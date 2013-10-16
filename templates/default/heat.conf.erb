@@ -39,11 +39,10 @@ heat_metadata_server_url=<%= @heat_api_cfn_scheme %>://<%= @heat_api_cfn_host %>
 <%= render "partials/queue-config.partial.erb" %>
 
 ##### POLICY #####
-policy_file=<%= @policy_file %>
-policy_default_rule=<%= @policy_default_rule %>
+<%= render "partials/policy.partial.erb" %>
 
 ##### HEARTBEAT #####
-<%= render "partials/heatbeat.partial.erb" %>
+<%= render "partials/heartbeat.partial.erb" %>
 
 ##### EC2 #####
 <%= render "partials/ec2.partial.erb" %>
