@@ -52,6 +52,9 @@ default["heat"]["sql"]["slave"]["salve_db"] = "mysql"
 # Max Template Size
 default["heat"]["template_size"] =  20480
 
+# Heat Engine
+default["heat"]["services"]["engine"]["name"] = "heat"
+
 # Cloud Watch API
 default["heat"]["services"]["cloudwatch_api"]["enabled"] = true
 default["heat"]["services"]["cloudwatch_api"]["scheme"] = "http"
