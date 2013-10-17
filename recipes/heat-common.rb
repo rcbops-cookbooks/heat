@@ -123,6 +123,7 @@ base_api_options = service_options["base_api"]
 cfn_api_options = service_options["cfn_api"]
 cw_api_options = service_options["cloudwatch_api"]
 
+heat_engine = get_settings_by_recipe("heat\:\:heat-engine", "heat")
 heat_api = get_bind_endpoint("heat", "base_api")
 heat_cfn_api = get_bind_endpoint("heat", "cfn_api")
 heat_cloudwatch_api = get_bind_endpoint("heat", "cloudwatch_api")
@@ -178,6 +179,8 @@ template "/etc/heat/heat.conf" do
 
     "heartbeat_ttl" => heat["heartbeat"]["ttl"],
     "heartbeat_freq" => heat["heartbeat"]["freq"],
+
+    "heat_engine_bind" => heat_engine["ipaddress"],
 
     "sql_backend" => heat["sql"]["backend"],
     "sql_max_retries" => heat["sql"]["max_retries"],

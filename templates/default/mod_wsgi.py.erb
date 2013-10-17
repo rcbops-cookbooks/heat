@@ -15,17 +15,18 @@
 #
 
 """
-Heat API WSGI.
+Heat <%= @name %> WSGI.
 """
 
+from oslo.config import cfg
 from heat.common import config
 from heat.openstack.common import log as logging
 
-from paste import deploy
-
 LOG = logging.getLogger('<%= @service %>')
 
-conf = '/etc/heat/heat.conf'
 name = "<%= @name %>"
-options = deploy.appconfig('config:%s' % conf, name=name)
-application = deploy.loadapp('config:%s' % conf, name=name)
+config_files = ['/etc/heat/api-paste.ini', '/etc/heat/heat.conf']
+cfg.CONF(project='heat', prog=name, default_config_files=config_files)
+logging.setup('heat')
+
+application = config.load_paste_app(name)
