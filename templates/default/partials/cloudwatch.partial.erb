@@ -5,5 +5,5 @@ backlog=<%= @heat_api_cloudwatch_backlog %>
 workers=<%= @heat_api_cloudwatch_workers %>
 <% if node["heat"]["ssl"]["enabled"] || @heat_api_cloudwatch_scheme == "https" -%>
 cert_file=<%= @heat_api_cloudwatch_cert %>
-key_file=<%= @heat_api_cloudwatch_cert %>
+key_file=<%= @heat_api_cloudwatch_key %>
 <% end -%>

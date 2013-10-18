@@ -5,5 +5,5 @@ backlog=<%= @heat_api_backlog %>
 workers=<%= @heat_api_workers %>
 <% if node["heat"]["ssl"]["enabled"] || @heat_api_scheme == "https" -%>
 cert_file=<%= @heat_api_cert %>
-key_file=<%= @heat_api_cert %>
+key_file=<%= @heat_api_key %>
 <% end -%>

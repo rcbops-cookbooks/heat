@@ -43,35 +43,35 @@ directory "/var/cache/heat" do
   mode "700"
 end
 
-# setup cert files
-case node["platform"]
-when "ubuntu", "debian"
-  grp = "ssl-cert"
-else
-  grp = "root"
+# signing dir is here, even for clients
+directory heat["ssl"]["dir"] do
+  action :create
+  owner "heat"
+  group "heat"
+  mode "700"
 end
 
-key_location = "#{heat["ssl"]["dir"]}/private/#{heat["ssl"]["key_file"]}"
+key_location = "#{heat["ssl"]["dir"]}/#{heat["ssl"]["key_file"]}"
 cookbook_file key_location do
   source "heat.key"
   mode 0644
-  owner "root"
-  group "root"
+  owner "heat"
+  group "heat"
 end
 
-cert_location = "#{heat["ssl"]["dir"]}/certs/#{heat["ssl"]["cert_file"]}"
+cert_location = "#{heat["ssl"]["dir"]}/#{heat["ssl"]["cert_file"]}"
 cookbook_file cert_location do
   source "heat.pem"
   mode 0644
-  owner "root"
-  group grp
+  owner "heat"
+  group "heat"
 end
 
 # Set SSL Section
 if heat["ssl"]["enabled"] == true
   # CA Location
   unless heat["ssl"].attribute?"ca_override"
-    ca_location = "#{heat["ssl"]["dir"]}/private/#{heat["ssl"]["ca_file"]}"
+    ca_location = "#{heat["ssl"]["dir"]}/#{heat["ssl"]["ca_file"]}"
   else
     ca_location = heat["ssl"]["ca_override"]
   end

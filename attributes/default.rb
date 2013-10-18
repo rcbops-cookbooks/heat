@@ -28,6 +28,7 @@ default["heat"]["ssl"]["enabled"] = false
 default["heat"]["ssl"]["ca_file"] = nil
 default["heat"]["ssl"]["cert_file"] = "heat.pem"
 default["heat"]["ssl"]["key_file"] = "heat.key"
+default["heat"]["ssl"]["dir"] = "/etc/heat/certs"
 
 # policy
 default["heat"]["policy_file"] = "policy.json"
@@ -132,7 +133,6 @@ when "rhel"
     "heat_engine_service" => "openstack-heat-engine",
     "package_overrides" => ""
   }
-  default["heat"]["ssl"]["dir"] = "/etc/pki/tls"
 when "debian"
   default["heat"]["platform"] = {
     "supporting_packages" => %w[heat-common python-heat python-mysqldb python-heatclient],
@@ -147,5 +147,4 @@ when "debian"
     "service_bin" => "/usr/sbin/service",
     "package_overrides" => "-o Dpkg::Options:='--force-confold' -o Dpkg::Options:='--force-confdef'"
   }
-  default["heat"]["ssl"]["dir"] = "/etc/ssl"
 end
