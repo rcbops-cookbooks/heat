@@ -38,37 +38,19 @@ end
 
 heat_api_cloudwatch = get_bind_endpoint("heat", "cloudwatch_api")
 
-# Setup SSL
-if heat_api_cloudwatch["scheme"] == "https"
-  #Set Service Stop
-  service platform_options["cloudwatch_api_service"] do
-    supports :status => true, :restart => true
-    action [ :disable, :stop ]
-  end
+# Set service start
+service platform_options["cloudwatch_api_service"] do
+  supports :status => true, :restart => true
+  action [:enable, :start]
+  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
+end
 
-  include_recipe "heat::heat-api-cloudwatch-ssl"
-else
-  # Set service start
-  service platform_options["cloudwatch_api_service"] do
-    supports :status => true, :restart => true
-    action [:enable, :start]
-    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
-  end
+# Add a monit process for heat
+include_recipe "monit::server"
 
-  # Add a monit process for heat
-  include_recipe "monit::server"
-
-  # matching a process name
-  monit_procmon platform_options["cloudwatch_api_service"] do
-    process_name platform_options["cloudwatch_api_service"]
-    start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
-    stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
-  end
-
-  if node.recipe?"apache2"
-    apache_site platform_options["cloudwatch_api_service"] do
-      enable false
-      notifies :restart, "service[apache2]", :immediately
-    end
-  end
+# matching a process name
+monit_procmon platform_options["cloudwatch_api_service"] do
+  process_name platform_options["cloudwatch_api_service"]
+  start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
+  stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
 end

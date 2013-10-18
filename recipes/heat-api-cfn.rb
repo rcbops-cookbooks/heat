@@ -71,37 +71,19 @@ keystone_endpoint "Register Heat Cloudformation Endpoint" do
   action :recreate
 end
 
-# Setup SSL
-if heat_api_cfn["scheme"] == "https"
-  # Set service stop
-  service platform_options["cfn_api_service"] do
-    supports :status => true, :restart => true
-    action [ :disable, :stop ]
-  end
+# Add a monit process for heat
+include_recipe "monit::server"
 
-  include_recipe "heat::heat-api-cfn-ssl"
-else
-  # Set service start
-  service platform_options["cfn_api_service"] do
-    supports :status => true, :restart => true
-    action [:enable, :start]
-    subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
-  end
+# matching a process name
+monit_procmon platform_options["cfn_api_service"] do
+  process_name platform_options["cfn_api_service"]
+  start_cmd "service #{platform_options["cfn_api_service"]} start"
+  stop_cmd "service #{platform_options["cfn_api_service"]} stop"
+end
 
-  # Add a monit process for heat
-  include_recipe "monit::server"
-
-  # matching a process name
-  monit_procmon platform_options["cfn_api_service"] do
-    process_name platform_options["cfn_api_service"]
-    start_cmd "service #{platform_options["cfn_api_service"]} start"
-    stop_cmd "service #{platform_options["cfn_api_service"]} stop"
-  end
-
-  if node.recipe?"apache2"
-    apache_site platform_options["cfn_api_service"] do
-      enable false
-      notifies :restart, "service[apache2]", :immediately
-    end
-  end
+# Set service start
+service platform_options["cfn_api_service"] do
+  supports :status => true, :restart => true
+  action [:enable, :start]
+  subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
