@@ -26,8 +26,6 @@ end
 
 ::Chef::Recipe.send(:include, Opscode::OpenSSL::Password)
 
-platform_options = node["heat"]["platform"]
-
 if node["developer_mode"] == true
   node.set_unless["heat"]["db"]["password"] = "heat"
 else
@@ -49,11 +47,8 @@ include_recipe "mysql::ruby"
 # Setup Keystone
 ks_admin_endpoint = get_access_endpoint("keystone-api", "keystone", "admin-api")
 keystone = get_settings_by_role("keystone-setup", "keystone")
-keystone_admin_user = keystone["admin_user"]
-keystone_admin_password = keystone["users"][keystone_admin_user]["password"]
-keystone_admin_tenant = keystone["users"][keystone_admin_user]["default_tenant"]
 
-mysql_info = create_db_and_user(
+create_db_and_user(
   "mysql",
   node["heat"]["db"]["name"],
   node["heat"]["db"]["username"],
