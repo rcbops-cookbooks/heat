@@ -5,6 +5,9 @@
 #Engine name
 host=<%= @heat_engine_bind %>
 
+# Legacy DB Configuration
+sql_connection=mysql://<%= "#{@mysql_user}:#{@mysql_password}@#{@mysql_host}/#{@mysql_db}" %>
+
 # Log Levels
 debug=<%= @debug %>
 verbose=<%= @verbose %>
