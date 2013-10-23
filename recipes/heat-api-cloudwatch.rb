@@ -36,8 +36,6 @@ cookbook_file "/etc/heat/templates/AWS_CloudWatch_Alarm.yaml" do
   mode "0644"
 end
 
-heat_api_cloudwatch = get_bind_endpoint("heat", "cloudwatch_api")
-
 # Set service start
 service platform_options["cloudwatch_api_service"] do
   supports :status => true, :restart => true
