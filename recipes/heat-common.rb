@@ -155,8 +155,6 @@ end
 
 notification_provider = node["heat"]["notification"]["driver"]
 case notification_provider
-when "rabbit"
-  notification_driver = "heat.openstack.common.notifier.rabbit_notifier"
 when "no_op"
   notification_driver = "heat.openstack.common.notifier.no_op_notifier"
 when "rpc"
