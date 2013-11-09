@@ -30,6 +30,10 @@ default["heat"]["ssl"]["cert_file"] = "heat.pem"
 default["heat"]["ssl"]["key_file"] = "heat.key"
 default["heat"]["ssl"]["dir"] = "/etc/heat/certs"
 
+# Options are no_op, rpc, log, rabbit
+default["heat"]["notification"]["driver"] = "rabbit"
+default["heat"]["notification"]["topics"] = "notifications"
+
 # policy
 default["heat"]["policy_file"] = "policy.json"
 default["heat"]["policy_default_rule"] = "default"

@@ -153,6 +153,21 @@ cookbook_file "/etc/heat/environment.d/default.yaml" do
   mode "0644"
 end
 
+notification_provider = node["heat"]["notification"]["driver"]
+case notification_provider
+when "rabbit"
+  notification_driver = "heat.openstack.common.notifier.rabbit_notifier"
+when "no_op"
+  notification_driver = "heat.openstack.common.notifier.no_op_notifier"
+when "rpc"
+  notification_driver = "heat.openstack.common.notifier.rpc_notifier"
+when "log"
+  notification_driver = "heat.openstack.common.notifier.log_notifier"
+else
+  msg = "#{notification_provider}, is not currently supported by these cookbooks."
+  Chef::Application.fatal! msg
+end
+
 template "/etc/heat/heat.conf" do
   source "heat.conf.erb"
   owner "heat"
@@ -233,6 +248,8 @@ template "/etc/heat/heat.conf" do
     "rabbit_port" => rabbit_info["port"],
     "rabbit_ha_queues" => rabbit_settings["cluster"] ? "True" : "False",
     "rabbit_password" => rabbit_settings["default_pass"],
-    "rabbit_username" => rabbit_settings["default_user"]
+    "rabbit_username" => rabbit_settings["default_user"],
+    "notification_driver" => notification_driver,
+    "notification_topics" => heat["notification"]["topics"]
   )
 end
