@@ -22,7 +22,7 @@ heat = get_settings_by_recipe("heat\:\:heat-setup", "heat")
 ks_service_endpoint = get_access_endpoint("keystone-api", "keystone", "service-api")
 ks_admin_endpoint = get_access_endpoint("keystone-api", "keystone", "admin-api")
 
-mysql_connect_ip = get_access_endpoint("mysql-master", "mysql", "db")["host"]
+mysql_connect_ip = get_mysql_endpoint["host"]
 
 # Get my Rabbit Queues and Settings
 rabbit_info = get_access_endpoint("rabbitmq-server", "rabbitmq", "queue")
