@@ -64,7 +64,7 @@ keystone_endpoint "Register Heat Cloudformation Endpoint" do
   api_ver ks_admin_endpoint["path"]
   auth_token keystone["admin_token"]
   service_type "cloudformation"
-  endpoint_region "RegionOne"
+  endpoint_region node["osops"]["region"]
   endpoint_adminurl heat_admin_api["uri"]
   endpoint_internalurl heat_internal_api["uri"]
   endpoint_publicurl heat_api_cfn["uri"]
