@@ -34,12 +34,3 @@ service platform_options["heat_engine_service"] do
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
 
-# Add a monit process for heat
-include_recipe "monit::server"
-
-# matching a process name
-monit_procmon platform_options["heat_engine_service"] do
-  process_name platform_options["heat_engine_service"]
-  start_cmd "service #{platform_options["heat_engine_service"]} start"
-  stop_cmd "service #{platform_options["heat_engine_service"]} stop"
-end
