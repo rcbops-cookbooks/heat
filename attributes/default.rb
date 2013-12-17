@@ -123,6 +123,10 @@ default["heat"]["syslog"]["facility"] = "LOG_LOCAL3"
 default["heat"]["logging"]["debug"] = "false"
 default["heat"]["logging"]["verbose"] = "true"
 
+# Generic regex for process pattern matching (to be used as a base pattern).
+# # Works for both Grizzly and Havana packages on Ubuntu and CentOS.
+procmatch_base = '^((/usr/bin/)?python\d? )?(/usr/bin/)?'
+
 case platform_family
 when "rhel"
   default["heat"]["platform"] = {
@@ -135,6 +139,10 @@ when "rhel"
     "cloudwatch_api_service" => "openstack-heat-api-cloudwatch",
     "heat_engine_package_list" => ["openstack-heat-engine"],
     "heat_engine_service" => "openstack-heat-engine",
+    "heat_api_procmatch" => procmatch_base + 'heat-api\b',
+    "heat_api_cloudwatch_procmatch" => procmatch_base + 'heat-api-cloudwatch\b',
+    "heat_api_cfn_procmatch" => procmatch_base + 'heat-api-cfn\b',
+    "heat_engine_procmatch" => procmatch_base + 'heat-engine\b',
     "package_overrides" => ""
   }
 when "debian"
@@ -149,6 +157,10 @@ when "debian"
     "heat_engine_package_list" => ["heat-engine"],
     "heat_engine_service" => "heat-engine",
     "service_bin" => "/usr/sbin/service",
+    "heat_api_procmatch" => procmatch_base + 'heat-api\b',
+    "heat_api_cloudwatch_procmatch" => procmatch_base + 'heat-api-cloudwatch\b',
+    "heat_api_cfn_procmatch" => procmatch_base + 'heat-api-cfn\b',
+    "heat_engine_procmatch" => procmatch_base + 'heat-engine\b',
     "package_overrides" => "-o Dpkg::Options:='--force-confold' -o Dpkg::Options:='--force-confdef'"
   }
 end
