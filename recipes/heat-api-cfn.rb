@@ -71,16 +71,6 @@ keystone_endpoint "Register Heat Cloudformation Endpoint" do
   action :recreate
 end
 
-# Add a monit process for heat
-include_recipe "monit::server"
-
-# matching a process name
-monit_procmon platform_options["cfn_api_service"] do
-  process_name platform_options["cfn_api_service"]
-  start_cmd "service #{platform_options["cfn_api_service"]} start"
-  stop_cmd "service #{platform_options["cfn_api_service"]} stop"
-end
-
 # Set service start
 service platform_options["cfn_api_service"] do
   supports :status => true, :restart => true
