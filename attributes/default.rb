@@ -123,18 +123,26 @@ default["heat"]["syslog"]["facility"] = "LOG_LOCAL3"
 default["heat"]["logging"]["debug"] = "false"
 default["heat"]["logging"]["verbose"] = "true"
 
+# Generic regex for process pattern matching (to be used as a base pattern).
+# # Works for both Grizzly and Havana packages on Ubuntu and CentOS.
+procmatch_base = '^((/usr/bin/)?python\d? )?(/usr/bin/)?'
+
 case platform_family
 when "rhel"
   default["heat"]["platform"] = {
     "supporting_packages" => %w[openstack-heat-common MySQL-python python-heatclient],
     "api_package_list" => ["openstack-heat-api"],
     "api_service" => "openstack-heat-api",
+    "api_procmatch" => procmatch_base + 'heat-api\b',
     "cfn_api_package_list" => ["openstack-heat-api-cfn"],
     "cfn_api_service" => "openstack-heat-api-cfn",
+    "cfn_api_procmatch" => procmatch_base + 'heat-api-cfn\b',
     "cloudwatch_api_package_list" => ["openstack-heat-api-cloudwatch"],
     "cloudwatch_api_service" => "openstack-heat-api-cloudwatch",
+    "cloudwatch_api_procmatch" => procmatch_base + 'heat-api-cloudwatch\b',
     "heat_engine_package_list" => ["openstack-heat-engine"],
     "heat_engine_service" => "openstack-heat-engine",
+    "heat_engine_procmatch" => procmatch_base + 'heat-engine\b',
     "package_overrides" => ""
   }
 when "debian"
@@ -142,12 +150,16 @@ when "debian"
     "supporting_packages" => %w[heat-common python-heat python-mysqldb python-heatclient],
     "api_package_list" => ["heat-api"],
     "api_service" => "heat-api",
+    "api_procmatch" => procmatch_base + 'heat-api\b',
     "cfn_api_package_list" => ["heat-api-cfn"],
     "cfn_api_service" => "heat-api-cfn",
+    "cfn_api_procmatch" => procmatch_base + 'heat-api-cfn\b',
     "cloudwatch_api_package_list" => ["heat-api-cloudwatch"],
     "cloudwatch_api_service" => "heat-api-cloudwatch",
+    "cloudwatch_api_procmatch" => procmatch_base + 'heat-api-cloudwatch\b',
     "heat_engine_package_list" => ["heat-engine"],
     "heat_engine_service" => "heat-engine",
+    "heat_engine_procmatch" => procmatch_base + 'heat-engine\b',
     "service_bin" => "/usr/sbin/service",
     "package_overrides" => "-o Dpkg::Options:='--force-confold' -o Dpkg::Options:='--force-confdef'"
   }

@@ -42,13 +42,3 @@ service platform_options["cloudwatch_api_service"] do
   action [:enable, :start]
   subscribes :restart, "template[/etc/heat/heat.conf]", :delayed
 end
-
-# Add a monit process for heat
-include_recipe "monit::server"
-
-# matching a process name
-monit_procmon platform_options["cloudwatch_api_service"] do
-  process_name platform_options["cloudwatch_api_service"]
-  start_cmd "service #{platform_options["cloudwatch_api_service"]} start"
-  stop_cmd "service #{platform_options["cloudwatch_api_service"]} stop"
-end
