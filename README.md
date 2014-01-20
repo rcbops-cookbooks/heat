@@ -60,7 +60,7 @@ Recipes
 
 **heat-setup**
 - Sets up database, config files and keystone config
-- Handles keystone registration and glance database creation
+- Handles keystone registration and database creation
 
 **heat-engine**
 - Sets up the Heat Engine
@@ -203,7 +203,7 @@ Attributes
 Templates
 =========
 
-* `heat.conf.erb` - rsyslog config file for glance
+* `heat.conf.erb` - Heat configuration file template
 
 
 License and Author
